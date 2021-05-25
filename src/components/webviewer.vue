@@ -3,7 +3,7 @@
     <div style="margin-right: 20px; flex: 1">
       <div v-show="documentLoaded" style="margin-bottom: 25px">
         <button type="button" @click="exportAnnotations()">
-          Export Annotation
+          Export annotations
         </button>
       </div>
 
@@ -36,6 +36,10 @@ export default {
       default: () => {
         return [];
       },
+    },
+    manipulatePageOffset: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -121,7 +125,10 @@ export default {
         // (e.g. if a documents first page is page 3 in the webviewer, after export the page will be changed from 3 -> 1)
         for (let i = 0; i < annotationsInPage.length; i++) {
           const annotation = annotationsInPage[i];
-          annotation.PageNumber = annotation.PageNumber - pageOffset;
+
+          if (this.manipulatePageOffset)
+            annotation.PageNumber = annotation.PageNumber - pageOffset;
+
           manager.addAnnotation(annotation);
         }
 
